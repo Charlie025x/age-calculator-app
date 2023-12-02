@@ -1,4 +1,4 @@
-import dArrow from "../public/assets/images/icon-arrow.svg";
+import dArrow from "./assets/images/icon-arrow.svg";
 
 function App() {
   return (
