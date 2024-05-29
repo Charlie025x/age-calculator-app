@@ -1,27 +1,39 @@
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useState } from "react";
 
 interface IFormInput {
-  dob: {
-    year: number;
-    month: number;
-    day: number;
-  };
+  year: number;
+  month: number;
+  day: number;
 }
 
 import dArrow from "./assets/images/icon-arrow.svg";
 
 function App() {
+  const [dayDiff, setDayDiff] = useState<number>(0);
+  const [monthDiff, setMonthDiff] = useState<number>(0);
+  const [yearDiff, setYearDiff] = useState<number>(0);
+  const [currentDate, setCurrentDate] = useState<Date>();
+
   const {
     register,
     handleSubmit,
-    watch,
     getValues,
-    formState: { errors },
+    formState: {},
   } = useForm<IFormInput>();
 
-  const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data);
+  const calcAge = () => {
+    if (currentDate) {
+      setDayDiff(currentDate?.getDay() - getValues("day"));
+      setMonthDiff(currentDate?.getMonth() - getValues("month"));
+      setYearDiff(currentDate?.getFullYear() - getValues("year"));
+    }
+  };
 
-  // console.log(watch("day")); // watch input value by passing the name of it
+  const onSubmit: SubmitHandler<IFormInput> = () => {
+    setCurrentDate(new Date());
+    calcAge();
+  };
 
   return (
     <div className="mx-4 mt-20 max-w-3xl rounded-2xl rounded-br-[5rem] bg-white px-6 py-10 md:mx-auto md:mt-36 md:rounded-br-[8rem] md:p-10">
@@ -35,12 +47,13 @@ function App() {
             day
           </label>
           <input
-            {...register("dob.day", {
+            {...register("day", {
               required: true,
               pattern: /\b(0?[1-9]|[12][0-9]|3[01])\b/g,
               maxLength: 2,
             })}
-            type="number"
+            type="text"
+            maxLength={2}
             className="max-w-full rounded-lg border p-3 md:text-2xl"
             placeholder="DD"
           />
@@ -50,12 +63,13 @@ function App() {
             month
           </label>
           <input
-            {...register("dob.month", {
+            {...register("month", {
               required: true,
               pattern: /1[0-2]|[1-9]/,
               maxLength: 2,
             })}
             type="text"
+            maxLength={2}
             className="max-w-full rounded-lg border p-3 md:text-2xl"
             placeholder="MM"
           />
@@ -65,12 +79,13 @@ function App() {
             year
           </label>
           <input
-            {...register("dob.year", {
+            {...register("year", {
               required: true,
               pattern: /1[0-2]|[1-9]/,
               maxLength: 4,
             })}
             type="text"
+            maxLength={4}
             className="max-w-full rounded-lg border p-3 md:text-2xl"
             placeholder="YY"
           />
@@ -86,13 +101,18 @@ function App() {
 
       <div className="pt-16 text-5xl italic md:text-7xl">
         <h3 className="font-extrabold">
-          <span className=" text-purple-600">--</span> years
+          <span className=" text-purple-600">{yearDiff ? yearDiff : "--"}</span>{" "}
+          years
         </h3>
         <h3 className="font-extrabold">
-          <span className=" text-purple-600">--</span> months
+          <span className=" text-purple-600">
+            {monthDiff ? monthDiff : "--"}
+          </span>{" "}
+          months
         </h3>
         <h3 className="font-extrabold">
-          <span className=" text-purple-600">--</span> days
+          <span className=" text-purple-600">{dayDiff ? dayDiff : "--"}</span>{" "}
+          days
         </h3>
       </div>
     </div>
