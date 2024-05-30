@@ -42,7 +42,7 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: [[github.com/Charlie025x/age-calculator-app](https://github.com/Charlie025x/age-calculator-app)](https://github.com/Charlie025x/age-calculator-app)
+- Solution URL: [[github.com/Charlie025x/age-calculator-app]](https://github.com/Charlie025x/age-calculator-app)](https://github.com/Charlie025x/age-calculator-app)
 - Live Site URL: [charlie025x.github.io/age-calculator-app/](https://charlie025x.github.io/age-calculator-app/)
 
 ## My process
