@@ -1,5 +1,7 @@
 import { useForm, SubmitHandler } from "react-hook-form";
+import { ErrorMessage } from "@hookform/error-message";
 import { useState } from "react";
+import dArrow from "./assets/images/icon-arrow.svg";
 
 interface IFormInput {
   year: number;
@@ -7,26 +9,35 @@ interface IFormInput {
   day: number;
 }
 
-import dArrow from "./assets/images/icon-arrow.svg";
-
 function App() {
   const [dayDiff, setDayDiff] = useState<number>(0);
   const [monthDiff, setMonthDiff] = useState<number>(0);
   const [yearDiff, setYearDiff] = useState<number>(0);
   const [currentDate, setCurrentDate] = useState<Date>();
 
-  const {
-    register,
-    handleSubmit,
-    getValues,
-    formState: {},
-  } = useForm<IFormInput>();
+  const { register, handleSubmit, getValues, formState } =
+    useForm<IFormInput>();
+  const { errors } = formState;
 
   const calcAge = () => {
     if (currentDate) {
-      setDayDiff(currentDate?.getDay() - getValues("day"));
-      setMonthDiff(currentDate?.getMonth() - getValues("month"));
-      setYearDiff(currentDate?.getFullYear() - getValues("year"));
+      let dayCheck = currentDate.getDate() - getValues("day");
+      let monthCheck = currentDate.getMonth() - getValues("month");
+      let yearCheck = currentDate.getFullYear() - getValues("year");
+
+      if (dayCheck < 0) {
+        dayCheck += 30;
+        monthCheck--;
+      }
+
+      if (monthCheck < 0) {
+        monthCheck += 12;
+        yearCheck--;
+      }
+
+      setDayDiff(dayCheck);
+      setMonthDiff(monthCheck);
+      setYearDiff(yearCheck);
     }
   };
 
@@ -43,52 +54,79 @@ function App() {
         className="relative grid grid-cols-3 gap-4 border-b-2  pb-10 md:grid-cols-4"
       >
         <div className="font-extrabold">
-          <label htmlFor="day" className="block text-xs uppercase">
+          <label
+            htmlFor="day"
+            className={`block text-xs uppercase ${errors.day?.message ? "text-red-600" : ""}`}
+          >
             day
           </label>
           <input
             {...register("day", {
-              required: true,
-              pattern: /\b(0?[1-9]|[12][0-9]|3[01])\b/g,
+              required: "This field is required",
+              pattern: {
+                value: /\b(0?[1-9]|[12][0-9]|3[01])\b/g,
+                message: "Must be a valid day",
+              },
               maxLength: 2,
             })}
             type="text"
             maxLength={2}
-            className="max-w-full rounded-lg border p-3 md:text-2xl"
+            className={`max-w-full rounded-lg border p-3 md:text-2xl ${errors.day?.message ? "border-red-600" : ""}`}
             placeholder="DD"
           />
+          <p className=" text-xs font-light text-red-600">
+            {errors.day?.message}
+          </p>
         </div>
         <div className="font-extrabold">
-          <label htmlFor="month" className="block text-xs uppercase">
+          <label
+            htmlFor="month"
+            className={`block text-xs uppercase ${errors.month?.message ? "text-red-600" : ""}`}
+          >
             month
           </label>
           <input
             {...register("month", {
-              required: true,
-              pattern: /1[0-2]|[1-9]/,
+              required: "This field is required",
+              pattern: {
+                value: /(^0?[1-9]$)|(^1[0-2]$)/,
+                message: "Must be a valid month",
+              },
               maxLength: 2,
             })}
             type="text"
             maxLength={2}
-            className="max-w-full rounded-lg border p-3 md:text-2xl"
+            className={`max-w-full rounded-lg border p-3 md:text-2xl ${errors.month?.message ? "border-red-600" : ""}`}
             placeholder="MM"
           />
+          <p className=" text-xs font-light text-red-600">
+            {errors.month?.message}
+          </p>
         </div>
         <div className="font-extrabold">
-          <label htmlFor="year" className="block text-xs uppercase">
+          <label
+            htmlFor="year"
+            className={`block text-xs uppercase ${errors.year?.message ? "text-red-600" : ""}`}
+          >
             year
           </label>
           <input
             {...register("year", {
-              required: true,
-              pattern: /1[0-2]|[1-9]/,
+              required: "This field is required",
+              pattern: {
+                value: /(?:(?:19|20)[0-9]{2})/,
+                message: "Must be a valid year",
+              },
               maxLength: 4,
             })}
             type="text"
             maxLength={4}
-            className="max-w-full rounded-lg border p-3 md:text-2xl"
+            className={`max-w-full rounded-lg border p-3 md:text-2xl ${errors.year?.message ? "border-red-600" : ""}`}
             placeholder="YY"
           />
+          <p className=" text-xs font-light text-red-600">
+            {errors.year?.message}
+          </p>
         </div>
         <button className="">
           <img
