@@ -70,7 +70,7 @@ I want to continue practicing Typescript. I'm almost certain I will be hating th
 
 ## Author
 
-- Website - [Charlie Alonso](https://charliemikealonso.com/)
+- Website - [Charlie Alonso](https://charlie025x.github.io/myPortfolio-tailwind/)
 - GitHub - [Charlie025x](https://github.com/Charlie025x)
 - Frontend Mentor - [@Charlie025x](https://www.frontendmentor.io/profile/Charlie025x)
 - LinkedIn - [Charliealonso002](https://www.linkedin.com/in/charliealonso002/)
